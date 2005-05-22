@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+   <!DOCTYPE hibernate-configuration
+   PUBLIC "-//Hibernate/Hibernate Configuration DTD//EN"
+   "http://hibernate.sourceforge.net/hibernate-configuration-2.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<!-- local connection properties -->
+		<property name="hibernate.connection.url">
+			jdbc:postgresql://localhost/weather?charset=UNICODE
+		</property>
+		<property name="hibernate.connection.driver_class">
+			org.postgresql.Driver
+		</property>
+		<property name="hibernate.connection.username">postgres</property>
+		<property name="hibernate.connection.password">11111</property>
+		<!-- property name="hibernate.connection.pool_size"></property -->
+		<!-- dialect for PostgreSQL -->
+		<property name="dialect">
+			net.sf.hibernate.dialect.PostgreSQLDialect
+		</property>
+		<property name="hibernate.transaction.factory_class">
+			net.sf.hibernate.transaction.JDBCTransactionFactory
+		</property>
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.cache.use_query_cache">true</property>
+		<mapping resource="Weather.hbm" />
+	</session-factory>
+</hibernate-configuration>

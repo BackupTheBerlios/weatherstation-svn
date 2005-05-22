@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+
+<hibernate-mapping package="org.idanso.weather">
+	<class
+		name="Station"
+		table="station"
+	>
+		<cache usage="read-write"/>
+		<id
+			name="Id"
+			type="java.lang.Long"
+			column="id"
+		>
+			<generator class="vm"/>
+		</id>
+
+		<property
+			name="Title"
+			column="title"
+			type="string"
+			not-null="false"
+			length="50"
+		/>
+		<property
+			name="Location"
+			column="location"
+			type="string"
+			not-null="false"
+			length="50"
+		/>
+		<property
+			name="Latitude"
+			column="latitude"
+			type="float"
+			not-null="false"
+			length="4"
+		/>
+		<property
+			name="Longitude"
+			column="longitude"
+			type="float"
+			not-null="false"
+			length="4"
+		/>
+		<property
+			name="Alias"
+			column="alias"
+			type="string"
+			not-null="false"
+			length="50"
+		/>
+	
+
+		<set name="StationRecords" lazy="false" >
+		<cache usage="read-write"/>
+			<key  column="station"/>			
+			<one-to-many  class="StationRecord" />
+		</set>
+
+
+	</class>	
+	
+	
+	
+	<class
+		name="StationRecord"
+		table="station_record"
+	>
+	<cache usage="read-write"/>
+		<id
+			name="Id"
+			type="java.lang.Long"
+			column="id"
+		>
+			<generator class="vm"/>
+		</id>
+		
+		<many-to-one class="Station" name="station" column="station" />
+
+		<property
+			name="Stamp"
+			column="stamp"
+			type="timestamp"
+			not-null="false"			
+		/>
+
+		<property
+			name="Temperature"
+			column="temperature"
+			type="float"
+			not-null="false"
+		/>
+		<property
+			name="Humadity"
+			column="humadity"
+			type="float"
+			not-null="false"
+		/>
+		<property
+			name="Pressure"
+			column="pressure"
+			type="float"
+			not-null="false"
+		/>
+		<property
+			name="WindDirection"
+			column="wind_direction"
+			type="float"
+			not-null="false"
+		/>
+		<property
+			name="windSpeed"
+			column="wind_speed"
+			type="float"
+			not-null="false"
+		/>
+
+	</class>	
+	
+	
+</hibernate-mapping>
