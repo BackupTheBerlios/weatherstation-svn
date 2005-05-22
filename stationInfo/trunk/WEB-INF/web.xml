@@ -1,0 +1,31 @@
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//
+DTD Web Application 1.2//EN"
+"http://java.sun.com/j2ee/dtds/web-app_2_2.dtd">
+
+<web-app>
+
+<!-- The following servlet element defines a servlet called 
+servletA.
+ The Java class of this servlet is servlets.servletA -->
+  <servlet>
+    <servlet-name>servletA</servlet-name>
+    <servlet-class>org.idanso.WeatherServlet</servlet-class>
+    <init-param>
+    	<param-name>properties</param-name>
+    	<param-value>/velocity.properties</param-value>
+    </init-param>
+    
+  </servlet>
+
+<!-- The following servlet-mapping maps the servlet called servletA
+ (see the servlet element) to a url-pattern of "blue". 
+ The url-pattern is used when requesting this servlet, for example:
+ http://host:port/myWebApp/blue. -->
+  <servlet-mapping>
+    <servlet-name>servletA</servlet-name>
+    <url-pattern>weather/*</url-pattern>
+  </servlet-mapping>
+
+</web-app>
+
+
