@@ -1,0 +1,29 @@
+
+.archiveTop
+{
+  position:relative;
+  height:250px;
+}
+
+
+.archiveTop .smallGraph
+{
+  position:absolute;
+  left:20px;
+  top:5px;
+  width:300px;
+}
+
+.archiveTop .smallGraph img
+{  
+  width:100%;
+  border:0;
+}
+  
+.archiveTop .archiveSummary
+{
+  position:absolute;
+  left:320px;
+  top:5px;
+  width:300px;
+}
