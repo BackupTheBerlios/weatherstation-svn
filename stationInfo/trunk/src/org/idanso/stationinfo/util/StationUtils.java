@@ -149,7 +149,14 @@ public class StationUtils {
 		Query q=session.createQuery("from StationRecord record where record.station=? order by record.Stamp DESC");
 		q.setParameter(0,station);
 		q.setMaxResults(1);
-		return (StationRecord) q.list().get(0);
+		if (q.list().size()==0)
+		{
+			return null;
+		}
+		else
+		{
+			return (StationRecord) q.list().get(0);
+		}
 	}
 
 
