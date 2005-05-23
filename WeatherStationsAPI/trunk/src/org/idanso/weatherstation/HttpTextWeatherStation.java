@@ -12,6 +12,16 @@ import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+/**
+ * Parses text content from HTTP, searching for formatted station data
+ * 
+ * Must be configured  using configure() with properties object which contains the 
+ * "url" property - containing a legal http utl
+ * 
+ * @author idan
+ *
+ */
+
 public class HttpTextWeatherStation extends HttpWeatherStation {
 	
 	private String url;

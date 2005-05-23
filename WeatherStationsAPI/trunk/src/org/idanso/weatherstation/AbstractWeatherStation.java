@@ -3,6 +3,13 @@ package org.idanso.weatherstation;
 import java.util.Date;
 import java.util.Properties;
 
+/**
+ * Abstract implementation of a weather station
+ * 
+ * @author idan
+ *
+ */
+
 public abstract class AbstractWeatherStation implements WeatherStation {
 	
 	private WeatherStationRecord record;

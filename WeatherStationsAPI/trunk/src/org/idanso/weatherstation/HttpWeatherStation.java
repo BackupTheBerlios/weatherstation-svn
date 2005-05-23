@@ -8,6 +8,13 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+/**
+ * A weather station which has fetches it's data source using HTTP.
+ * 
+ * @author idan
+ *
+ */
+
 public abstract class HttpWeatherStation extends AbstractWeatherStation {
 
 	private HttpClient client;
@@ -49,9 +56,27 @@ public abstract class HttpWeatherStation extends AbstractWeatherStation {
 		
 	}
 
-
+	/**
+	 * Returns the current record validity time in miliseconds. the http source
+	 * will not be requested again before this time passes since last request
+	 * 
+	 * @return
+	 */
 	protected abstract long getCacheTime();
-	protected abstract boolean handleHttpResponse(HttpMethod method); 
+	
+	/**
+	 * Handle the fetched HTTP request
+	 * 
+	 * @param method
+	 * @return true if data changed since the last request
+	 */
+	protected abstract boolean handleHttpResponse(HttpMethod method);
+	
+	/**
+	 * Returns HttpMethod(from common-httpclient package) instance which defines
+	 * the http source url, parameters, etc..
+	 * @return
+	 */
 	protected abstract HttpMethod getHttpMethod();
 
 

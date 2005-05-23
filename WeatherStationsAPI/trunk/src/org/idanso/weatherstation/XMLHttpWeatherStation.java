@@ -13,6 +13,16 @@ import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+/**
+ * Extends HttpWeatherStation, to be used for XML over HTTP based data sources, a subclass
+ * of XMLHTTPWeatherStation needs only to process the resulting DOM tree from a remote
+ * XML file
+ * 
+ * 
+ * @author idan
+ *
+ */
+
 public abstract class XMLHttpWeatherStation extends HttpWeatherStation {
 
 	private DocumentBuilder builder;
@@ -42,6 +52,12 @@ public abstract class XMLHttpWeatherStation extends HttpWeatherStation {
 
 	}
 
+	/**
+	 * Process an XML document tree
+	 * 
+	 * @param document
+	 * @return
+	 */
 	protected abstract boolean handleXMLHttp(Document document);
 
 

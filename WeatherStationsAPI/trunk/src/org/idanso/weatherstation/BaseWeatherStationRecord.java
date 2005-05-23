@@ -2,6 +2,13 @@ package org.idanso.weatherstation;
 
 import java.util.Date;
 
+/**
+ * Basic implementation of WeatherStationRecord
+ * 
+ * @author idan
+ *
+ */
+
 public class BaseWeatherStationRecord implements WeatherStationRecord {
 	
 	private float temperature;
@@ -13,7 +20,6 @@ public class BaseWeatherStationRecord implements WeatherStationRecord {
 
 	public BaseWeatherStationRecord(float temperature, float humadity, float pressure, float direction, float speed, Date stamp) {
 		super();
-		// TODO Auto-generated constructor stub
 		this.temperature = temperature;
 		this.humadity = humadity;
 		this.pressure = pressure;
@@ -23,7 +29,6 @@ public class BaseWeatherStationRecord implements WeatherStationRecord {
 	}
 
 	public WeatherStation getStation() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

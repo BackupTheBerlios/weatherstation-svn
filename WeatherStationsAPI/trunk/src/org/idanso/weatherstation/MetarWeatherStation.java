@@ -13,6 +13,17 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+/**
+ * Implements a weather station by parsing METAR reports from NOAA. uses the
+ * jweather package for parsing.
+ * 
+ * Must be configured  using configure() with properties object which contains the 
+ * "station" property - marking a legal station code(such as LLBG)
+ * 
+ * @author idan
+ *
+ */
+
 public class MetarWeatherStation extends HttpWeatherStation {
 
 	public class MetarStationRecord implements WeatherStationRecord {

@@ -2,9 +2,20 @@ package org.idanso.weatherstation;
 
 import java.util.Date;
 
+/**
+ * Interface for defining a weather station record
+ * 
+ * @author idan
+ *
+ */
+
 public interface WeatherStationRecord {
 
-	
+	/**
+	 * Get the station this records belongs to
+	 * 
+	 * @return
+	 */
 	public WeatherStation getStation();
 	
 	/**
@@ -33,6 +44,11 @@ public interface WeatherStationRecord {
 	 */
 	public float getWindSpeed()  throws UnsupportedDevice ;
 
+	/**
+	 * Get the time for which the record is valid for
+	 * 
+	 * @return
+	 */
 	public Date getStamp();
 	
 	
