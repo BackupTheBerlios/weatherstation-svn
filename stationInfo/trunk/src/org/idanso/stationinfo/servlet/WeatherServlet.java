@@ -80,6 +80,20 @@ public class WeatherServlet extends VelocityServlet {
 		boolean reverse=(req.getParameter("reverse")==null); //$NON-NLS-1$
 		boolean notime=true;
 		int delta=24;
+		float scale=1;
+		{
+			String scaleParam=req.getParameter("scale");
+			if (scaleParam!=null)
+			{
+				try
+				{
+					scale=Math.max(0,Math.min(1,Float.parseFloat(scaleParam)));
+				}
+				catch(NumberFormatException e)
+				{				
+				}
+			}
+		}
 		Calendar calendar=Calendar.getInstance(req.getLocale());
 		{
 			String str;
@@ -129,11 +143,11 @@ public class WeatherServlet extends VelocityServlet {
 		String chartCacheId;
 		if (!notime)
 		{
-			chartCacheId="ThermalRHChart"+id+start.toString()+end.toString(); //$NON-NLS-1$
+			chartCacheId="ThermalRHChart"+id+"_"+Float.toString(scale)+start.toString()+end.toString(); //$NON-NLS-1$
 		}
 		else
 		{
-			chartCacheId="ThermalRHChartNOW"+id+Integer.toString(delta);			 //$NON-NLS-1$
+			chartCacheId="ThermalRHChartNOW"+id+"_"+Float.toString(scale)+Integer.toString(delta);			 //$NON-NLS-1$
 		}
 		log.debug("Checking cache for" + chartCacheId);					 //$NON-NLS-1$
 		Cache chartCache=cacheManager.getCache("chartCache"); //$NON-NLS-1$
@@ -168,7 +182,7 @@ public class WeatherServlet extends VelocityServlet {
 			chart.getXYPlot().getRangeAxis(1).setRangeWithMargins(min.getHumadity(),max.getHumadity());
 			try {
 				res.setContentType("image/png"); //$NON-NLS-1$
-				byte[] image=ChartUtilities.encodeAsPNG(chart.createBufferedImage(800,600));
+				byte[] image=ChartUtilities.encodeAsPNG(chart.createBufferedImage((int) (800*scale),(int) (600*scale)));
 				chartCache.put(new Element(chartCacheId, image));;
 				log.debug("Storing cache entry for" + chartCacheId);					 //$NON-NLS-1$
 				res.getOutputStream().write(image);
@@ -267,15 +281,19 @@ public class WeatherServlet extends VelocityServlet {
 	
 	public Template handleRequest(HttpServletRequest req,HttpServletResponse res,Context context) throws ResourceNotFoundException, ParseErrorException, Exception
 	{
+		// Set cache expire
+		res.setDateHeader("Expires",System.currentTimeMillis() + 60*60*1000);
+		// Date time formatter
 		context.put("dateTimeFormatter",DateFormat.getDateTimeInstance(DateFormat.LONG,DateFormat.LONG,req.getLocale())); 
-		context.put("dateFormatter",DateFormat.getDateInstance(DateFormat.SHORT,req.getLocale())); 
+		context.put("dateFormatter",DateFormat.getDateInstance(DateFormat.SHORT,req.getLocale()));
+		// Site title
 		context.put("title",Messages.getString("WeatherServlet.Weather_Stations")); //$NON-NLS-1$ //$NON-NLS-2$
+		// Split per operation
 		String operation=req.getPathInfo();
 		if (operation==null)
 			operation="/top"; //$NON-NLS-1$
 		if (operation.equals("/")) //$NON-NLS-1$
 			operation="/top"; //$NON-NLS-1$
-		System.out.println(operation);
 		if (operation.equals("/top")) //$NON-NLS-1$
 		{
 			return doTop(req,res,context);

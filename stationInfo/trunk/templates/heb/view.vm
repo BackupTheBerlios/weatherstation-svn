@@ -9,7 +9,7 @@
 <div class="archiveTop">
 
 <div class="smallGraph">
-<a href="chart?id=$station.id&amp;day=$date.format('d',$nextDate)&amp;month=$date.format('M',$nextDate)&amp;year=$date.format('yyyy',$nextDate)&amp;delta=36&hour=0&amp;minute=0"><img src="chart?id=$station.id&amp;day=$date.format('d',$nextDate)&amp;month=$date.format('M',$nextDate)&amp;year=$date.format('yyyy',$nextDate)&amp;delta=36&hour=0&amp;minute=0" alt="תרשים טמפ' ולחות יומי" /></a>
+<a href="chart?id=$station.id&amp;day=$date.format('d',$nextDate)&amp;month=$date.format('M',$nextDate)&amp;year=$date.format('yyyy',$nextDate)&amp;delta=36&hour=0&amp;minute=0"><img src="chart?id=$station.id&amp;day=$date.format('d',$nextDate)&amp;month=$date.format('M',$nextDate)&amp;year=$date.format('yyyy',$nextDate)&amp;delta=36&hour=0&amp;minute=0&amp;scale=0.4" alt="תרשים טמפ' ולחות יומי" /></a>
 </div>
 
 <div class="archiveSummary">
