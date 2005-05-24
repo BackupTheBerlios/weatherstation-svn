@@ -1,12 +1,10 @@
 package org.idanso.dataset;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.idanso.weather.Station;
 import org.idanso.weather.StationRecord;
 import org.jfree.data.DomainOrder;
-import org.jfree.data.Range;
 import org.jfree.data.general.DatasetChangeListener;
 import org.jfree.data.general.DatasetGroup;
 import org.jfree.data.xy.XYDataset;

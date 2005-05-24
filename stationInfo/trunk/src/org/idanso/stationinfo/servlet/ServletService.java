@@ -1,17 +1,13 @@
 package org.idanso.stationinfo.servlet;
 
-import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.idanso.service.Service;
 import org.idanso.service.ServiceException;
-import org.mortbay.http.HttpContext;
 import org.mortbay.http.HttpServer;
 import org.mortbay.http.handler.ResourceHandler;
-import org.mortbay.jetty.servlet.ServletHolder;
 import org.mortbay.jetty.servlet.ServletHttpContext;
 import org.mortbay.util.InetAddrPort;
 

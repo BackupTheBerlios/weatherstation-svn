@@ -2,7 +2,6 @@ package org.idanso.stationinfo.servlet;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
@@ -12,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Timer;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +33,6 @@ import org.apache.velocity.servlet.VelocityServlet;
 import org.apache.velocity.tools.generic.DateTool;
 import org.idanso.Messages;
 import org.idanso.dataset.StationRecordsXYDataset;
-import org.idanso.stationinfo.fetch.StationUpdater;
 import org.idanso.stationinfo.util.HibernateUtil;
 import org.idanso.stationinfo.util.StationUtils;
 import org.idanso.weather.Station;

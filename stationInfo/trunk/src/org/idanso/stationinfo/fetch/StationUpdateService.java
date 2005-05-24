@@ -6,10 +6,8 @@ import net.sf.hibernate.HibernateException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.soap.server.ServiceManager;
 import org.idanso.service.Service;
 import org.idanso.service.ServiceException;
-import org.idanso.stationinfo.servlet.ServletService;
 
 public class StationUpdateService implements Service {
 

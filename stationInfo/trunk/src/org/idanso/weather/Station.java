@@ -1,8 +1,6 @@
 package org.idanso.weather;
 
 import java.util.Date;
-import java.util.Iterator;
-import java.util.Set;
 
 import net.sf.hibernate.HibernateException;
 
