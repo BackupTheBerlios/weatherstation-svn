@@ -31,12 +31,15 @@ public class StationUtils {
 		{
 			stations=new ArrayList();
 			Iterator it=session.iterate("select distinct station from Station as station");
+			Query q=session.createQuery("from StationRecord as record where record.Stamp = (select max(rec.Stamp) from StationRecord rec where rec.station=?)");
+			q.setCacheable(true);
 			while(it.hasNext())			
 			{
 				Station station=(Station) it.next();
 				try
 				{
-					StationRecord record=(StationRecord) session.iterate("from StationRecord as record where record.Stamp = (select max(rec.Stamp) from StationRecord rec where rec.station=?)",station.getId(), Hibernate.LONG).next();
+					q.setParameter(0,station);
+					StationRecord record=(StationRecord) q.iterate().next();
 					station.setLatestRecord(record);
 				}
 				catch(NoSuchElementException e)
