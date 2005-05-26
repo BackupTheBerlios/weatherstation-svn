@@ -62,7 +62,7 @@
     </target>
 
 	<!-- No default Target -->
-    <target name="all" depends="jar">
+    <target name="all" depends="jar,jar-core">
     </target>
     
 	<!-- Target to create files to store on the Web site -->
@@ -87,11 +87,35 @@
 			</manifest>
 		</jar>
     </target>
+    
+    <target name="jar-core" depends="compile-core">
+		<mkdir dir="${dist.dir}"/>
+    	<jar destfile="${dist.dir}/${app.name}-core-${app.version}.jar">
+			<fileset dir="${build.dir}/classes" includes="org/idanso/weatherstation/*.class" />
+			<fileset dir="${basedir}" includes="LICENSE"/>
+			<manifest>
+				<attribute name="Built-By" value="Idan Sofer"/>
+			</manifest>			
+		</jar>
+    </target>
 
-    <target name="compile">
+    <target name="compile-core">
         <mkdir dir="${build.dir}/classes"/>
 		<javac srcdir="${src.dir}"
 			  destdir="${build.dir}/classes"
+			  includes="org/idanso/weatherstation/*.java"
+				debug="${compile.debug}"
+		  deprecation="${compile.deprecation}"
+			 optimize="${compile.optimize}">
+        <classpath refid="weatherstations.classpath"/>
+        </javac>
+    </target>
+
+    <target name="compile" depends="compile-core">
+        <mkdir dir="${build.dir}/classes"/>
+		<javac srcdir="${src.dir}"
+			  destdir="${build.dir}/classes"
+			  excludes="org/idanso/weatherstation/*.java"
 				debug="${compile.debug}"
 		  deprecation="${compile.deprecation}"
 			 optimize="${compile.optimize}">
