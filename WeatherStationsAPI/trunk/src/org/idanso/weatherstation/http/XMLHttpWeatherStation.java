@@ -1,4 +1,4 @@
-package org.idanso.weatherstation;
+package org.idanso.weatherstation.http;
 
 import java.io.IOException;
 import java.io.InputStream;

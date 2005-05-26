@@ -1,4 +1,4 @@
-package org.idanso.weatherstation;
+package org.idanso.weatherstation.http;
 
 import java.io.IOException;
 import java.util.Date;
@@ -7,6 +7,8 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.idanso.weatherstation.AbstractWeatherStation;
+import org.idanso.weatherstation.WeatherStationException;
 
 /**
  * A weather station which has fetches it's data source using HTTP.

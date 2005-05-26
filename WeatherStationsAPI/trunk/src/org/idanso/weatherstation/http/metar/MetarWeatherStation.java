@@ -1,5 +1,5 @@
 
-package org.idanso.weatherstation;
+package org.idanso.weatherstation.http.metar;
 
 import java.util.Date;
 import java.util.Properties;
@@ -12,6 +12,10 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.idanso.weatherstation.UnsupportedDevice;
+import org.idanso.weatherstation.WeatherStation;
+import org.idanso.weatherstation.WeatherStationRecord;
+import org.idanso.weatherstation.http.HttpWeatherStation;
 
 /**
  * Implements a weather station by parsing METAR reports from NOAA. uses the

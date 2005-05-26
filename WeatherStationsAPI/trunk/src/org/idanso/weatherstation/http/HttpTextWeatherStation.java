@@ -1,4 +1,4 @@
-package org.idanso.weatherstation;
+package org.idanso.weatherstation.http;
 
 import java.util.Date;
 import java.util.Properties;
@@ -9,6 +9,8 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.idanso.weatherstation.BaseWeatherStationRecord;
+import org.idanso.weatherstation.WeatherStationRecord;
 
 /**
  * Parses text content from HTTP, searching for formatted station data
