@@ -53,14 +53,6 @@
 			length="50"
 		/>
 	
-
-		<set name="StationRecords" lazy="false" >
-		<cache usage="read-write"/>
-			<key  column="station"/>			
-			<one-to-many  class="StationRecord" />
-		</set>
-
-
 	</class>	
 	
 	
