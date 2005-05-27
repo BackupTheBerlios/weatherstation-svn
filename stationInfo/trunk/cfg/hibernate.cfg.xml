@@ -24,5 +24,6 @@
 		<property name="hibernate.show_sql">true</property>
 		<property name="hibernate.cache.use_query_cache">true</property>
 		<mapping resource="Weather.hbm" />
+		<mapping resource="Translation.hbm" />
 	</session-factory>
 </hibernate-configuration>
