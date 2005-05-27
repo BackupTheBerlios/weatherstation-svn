@@ -99,6 +99,38 @@
 		</jar>
     </target>
 
+
+    <target name="gcjlib-extra" depends="compile"
+        description="Create native libraries for use with gcj" >
+    	<mkdir dir="${build.dir}/.libs"/>
+      	<taskdef name="gcjlib" classname="org.spindazzle.ant.taskdefs.GcjLib" />
+	 <gcjlib name="build/.libs/libweatherstation-extra-java">
+	    <classpath location="${build.dir}/classes:lib/*" />
+	     <fileset dir="${build.dir}/classes"
+	     includes="org/idanso/weatherstation/http/*.class,org/idanso/weatherstation/metar/*.class"
+	     />
+	 </gcjlib>					     
+     </target>
+     
+    <target name="gcjlib-core" depends="compile-core"
+        description="Create native libraries for use with gcj" >
+    	<mkdir dir="${build.dir}/.libs"/>
+      	<taskdef name="gcjlib" classname="org.spindazzle.ant.taskdefs.GcjLib" />
+	 <gcjlib name="build/.libs/libweatherstation-java">
+	    <classpath location="{$lib.dir}">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar"/>
+		</fileset>
+		<dirset dir="{$build.dir}/classes" />
+	    </classpath>
+	     <fileset dir="${build.dir}/classes"
+	     includes="org/idanso/weatherstation/*.class"
+	     />
+	     <fileset dir="${lib.dir}" includes="*.jar" />
+	 </gcjlib>					     
+     </target>
+					       
+
     <target name="compile-core">
         <mkdir dir="${build.dir}/classes"/>
 		<javac srcdir="${src.dir}"
