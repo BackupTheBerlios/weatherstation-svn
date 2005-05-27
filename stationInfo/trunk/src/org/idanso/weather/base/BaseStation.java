@@ -51,9 +51,6 @@ public abstract class BaseStation  implements Serializable {
 	private float longitude;
 	private java.lang.String alias;
 
-	// collections
-	private java.util.Set stationRecords;
-
 
 
 	/**
@@ -159,28 +156,6 @@ public abstract class BaseStation  implements Serializable {
 	 */
 	public void setAlias (java.lang.String alias) {
 		this.alias = alias;
-	}
-
-
-
-	/**
-	 * Return the value associated with the column: StationRecords
-	 */
-	public java.util.Set getStationRecords () {
-		return stationRecords;
-	}
-
-	/**
-	 * Set the value related to the column: StationRecords
-	 * @param stationRecords the StationRecords value
-	 */
-	public void setStationRecords (java.util.Set stationRecords) {
-		this.stationRecords = stationRecords;
-	}
-
-	public void addToStationRecords (org.idanso.weather.StationRecord stationRecord) {
-		if (null == getStationRecords()) setStationRecords(new java.util.HashSet());
-		getStationRecords().add(stationRecord);
 	}
 
 
