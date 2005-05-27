@@ -1,0 +1,41 @@
+#parse("header.vm")
+<div class="navig">
+<a href="top">#m("station_list")</a>
+</div>
+<table>
+<caption>#m("station_list")</caption>
+<thead>
+  <tr>
+    <th>#m("station_name")</th>
+    <th>#m("station_location")</th>
+    <th>#m("temperature")</th>
+    <th>#m("humadity")</th>
+    <th>#m("pressure")</th>
+    <th>#m("wind")</th>
+    <th>#m("last_update")</th>
+    <th>#m("chart")</th>
+    <th>#m("archive")</th>
+  </tr>
+</thead>
+<tbody>
+#foreach ($station in $stations)
+<tr>
+  <td>$station.Title</td>
+  <td>$station.Location</td>
+  <td>${station.LatestRecord.Temperature}C</td>
+  <td>${station.LatestRecord.Humadity}%</td>
+  <td>${station.LatestRecord.Pressure}MB</td>
+  <td>$station.LatestRecord.WindDirection $station.LatestRecord.WindSpeed</td>
+  <td>$dateTimeFormatter.format($station.LatestRecord.Stamp)</td>
+  <td>
+    <div><a href="chart?id=${station.id}&amp;delta=12">#m("12_hours")</a></div>
+    <div><a href="chart?id=${station.id}&amp;delta=24">#m("24_hours")</a></div>
+    <div><a href="chart?id=${station.id}&amp;delta=48">#m("48_hours")</a></div>
+    <div><a href="chart?id=${station.id}&amp;delta=72">#m("72_hours")</a></div>
+  </td>
+  <td><a href="view?id=${station.id}">#m("archive")</a></td>
+</tr>
+#end
+</tbody>
+</table>
+#parse("footer.vm")

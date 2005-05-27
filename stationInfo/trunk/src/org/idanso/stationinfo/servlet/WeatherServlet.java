@@ -5,8 +5,10 @@ import java.awt.Color;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,8 +35,10 @@ import org.apache.velocity.servlet.VelocityServlet;
 import org.apache.velocity.tools.generic.DateTool;
 import org.idanso.Messages;
 import org.idanso.dataset.StationRecordsXYDataset;
+import org.idanso.stationinfo.StationInfoLauncher;
 import org.idanso.stationinfo.util.HibernateUtil;
 import org.idanso.stationinfo.util.StationUtils;
+import org.idanso.stationinfo.util.TranslationUtils;
 import org.idanso.weather.Station;
 import org.idanso.weather.StationRecord;
 import org.jfree.chart.ChartFactory;
@@ -254,16 +258,7 @@ public class WeatherServlet extends VelocityServlet {
 	}
 	
 	public Template getTemplate(HttpServletRequest req, String tmpl) throws ResourceNotFoundException, ParseErrorException, Exception {
-		Cache templateCache=cacheManager.getCache("templateCache");
-		String language=req.getLocale().getISO3Language();		
-		try
-		{
-			return super.getTemplate(PATH_SEPERATOR+language+PATH_SEPERATOR+tmpl+TEMPLATE_EXT);
-		}
-		catch(ResourceNotFoundException e)
-		{
-			return super.getTemplate(PATH_SEPERATOR+DEFAULT_LANGUAGE+PATH_SEPERATOR+tmpl+TEMPLATE_EXT);			
-		}
+		return super.getTemplate(tmpl+TEMPLATE_EXT);
 	}
 	
 	protected Properties loadConfiguration(ServletConfig conf)
@@ -283,6 +278,14 @@ public class WeatherServlet extends VelocityServlet {
 	{
 		// Set cache expire
 		res.setDateHeader("Expires",System.currentTimeMillis() + 60*60*1000);
+		// Build perfered languages list(Enumeration sucks!)		
+		List locales=new ArrayList();
+		Enumeration e=req.getLocales();
+		while(e.hasMoreElements())
+			locales.add(e.nextElement());
+		// Set translation object
+		context.put("messages",TranslationUtils.getInstance());
+		context.put("locales",locales);
 		// Date time formatter
 		context.put("dateTimeFormatter",DateFormat.getDateTimeInstance(DateFormat.LONG,DateFormat.LONG,req.getLocale())); 
 		context.put("dateFormatter",DateFormat.getDateInstance(DateFormat.SHORT,req.getLocale()));

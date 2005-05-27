@@ -1,10 +1,10 @@
-#parse("heb/header.vm")
+#parse("header.vm")
 <div class="navig">
-<a href="top">רשימת התחנות</a>
+<a href="top">#m("station_list")</a>
 ==>
-<a href="top">ארכיון $station.Title</a>
+<a href="top">#m("archive") $station.Title</a>
 </div>
-<h2>רישומים עבור "$station.Title" - $station.Location לתאריך $dateFormatter.format($currDate)</h2>
+<h2>#m("records_for") "$station.Title" - $station.Location #m("for_date") $dateFormatter.format($currDate)</h2>
 
 <div class="archiveTop">
 
@@ -14,25 +14,25 @@
 
 <div class="archiveSummary">
   <table>
-  <caption>ערכי קיצון</caption>
+  <caption>#m("extreme_values")</caption>
   <thead>
     <tr>
-      <th>פרמטר</th>
-      <th>מינ</th>
-      <th>מקס</th>
+      <th>#m("parameter")</th>
+      <th>#m("min")</th>
+      <th>#m("max")</th>
   <tbody>
     <tr>
-      <th>טמפרטורה</th>
+      <th>#m("temperature")</th>
       <td>$minData.Temperature</td>
       <td>$maxData.Temperature</td>
     </tr>
     <tr>
-      <th>לחות</th>
+      <th>#m("humadity")</th>
       <td>$minData.Humadity</td>
       <td>$maxData.Humadity</td>
     </tr>
     <tr>
-      <th>לחץ</th>
+      <th>#m("pressure")</th>
       <td>$minData.Pressure</td>
       <td>$maxData.Pressure</td>
     </tr>
@@ -43,21 +43,21 @@
 </div>
 
 <div class="archiveNavig">
-  <a href="view?id=$station.id&amp;day=$date.format('d',$prevDate)&amp;month=$date.format('M',$prevDate)&amp;year=$date.format('yyyy',$prevDate)">ליום הקודם </a>
+  <a href="view?id=$station.id&amp;day=$date.format('d',$prevDate)&amp;month=$date.format('M',$prevDate)&amp;year=$date.format('yyyy',$prevDate)">#m("previous_day")</a>
    &nbsp;
-  <a href="view?id=$station.id&amp;day=$date.format('d',$nextDate)&amp;month=$date.format('M',$nextDate)&amp;year=$date.format('yyyy',$nextDate)">ליום הבא </a>
+  <a href="view?id=$station.id&amp;day=$date.format('d',$nextDate)&amp;month=$date.format('M',$nextDate)&amp;year=$date.format('yyyy',$nextDate)">#m("next_day")</a>
 
 </div>
 
 <table>
-<caption>פירוט רישומי התחנה</caption>
+<caption>#m("station_record_details")</caption>
 <thead>
   <tr>
-    <th>זמן עדכון</th>
-    <th>טמפרטורה</th>
-    <th>לחות</th>
-    <th>לחץ</th>
-    <th>רוח</th>
+    <th>#m("update_time")</th>
+    <th>#m("temperature")</th>
+    <th>#m("humadity")</th>
+    <th>#m("pressure")</th>
+    <th>#m("wind")</th>
   </tr>
 </thead>
 <tbody>
@@ -72,4 +72,4 @@
 #end
 </tbody>
 </table>
-#parse("heb/footer.vm")
+#parse("footer.vm")
