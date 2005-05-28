@@ -15,14 +15,14 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.impl.Log4JLogger;
+import org.apache.commons.logging.LogFactory;
 import org.idanso.weather.Station;
 import org.idanso.weather.StationRecord;
 
 public class StationUtils {
 
 	private static Properties conf=null;
-	private static Log log=new Log4JLogger(StationUtils.class.getName());
+	private static Log log=LogFactory.getLog(StationUtils.class);
 	
 	public static List getAllStations(boolean extended) throws HibernateException {		
 		Session session=HibernateUtil.getSession();

@@ -13,7 +13,7 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.impl.Log4JLogger;
+import org.apache.commons.logging.LogFactory;
 import org.idanso.stationinfo.util.HibernateUtil;
 import org.idanso.stationinfo.util.StationUtils;
 import org.idanso.weather.Station;
@@ -28,7 +28,7 @@ public class StationUpdater extends TimerTask{
 	private Map driverMap=new HashMap();
 	private Map confMap=new HashMap();
 	// TODO: Find out why we have to deal with Log4JLogger directly..
-	private static Log log=new Log4JLogger(StationUpdater.class.getName());
+	private static Log log=LogFactory.getLog(StationUpdater.class);
 	
 	private List updateStations;
 	

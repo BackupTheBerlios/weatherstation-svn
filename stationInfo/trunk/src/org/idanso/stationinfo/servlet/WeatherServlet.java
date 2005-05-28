@@ -26,7 +26,7 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.impl.Log4JLogger;
+import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.Template;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.exception.ParseErrorException;
@@ -335,7 +335,7 @@ public class WeatherServlet extends VelocityServlet {
 		
 	private void initLog() {
 		// TODO: Find out why we have to deal with Log4JLogger directly..
-		log=new Log4JLogger(WeatherServlet.class.getName());
+		log=LogFactory.getLog(WeatherServlet.class);
 	}
 
 	protected void setContentType(HttpServletRequest req, HttpServletResponse res) {
