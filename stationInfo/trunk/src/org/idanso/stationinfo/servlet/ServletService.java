@@ -50,7 +50,7 @@ public class ServletService implements Service {
 				// Add servlet handler
 				ServletHttpContext context=new ServletHttpContext();
 				context.setContextPath("/");
-				context.addServlet("/weather/*",WeatherServlet.class.getCanonicalName());
+				context.addServlet("/weather/*","org.idanso.stationinfo.servlet.WeatherServlet");
 				httpServer.addContext(context);			
 				// Add static content handler
 				context=new ServletHttpContext();
