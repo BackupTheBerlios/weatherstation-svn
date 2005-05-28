@@ -29,8 +29,9 @@ public class StationInfoLauncher {
 	 * @throws ClassNotFoundException 
 	 * @throws IllegalAccessException 
 	 * @throws InstantiationException 
+	 * @throws InterruptedException 
 	 */
-	public static void main(String[] args) throws ServiceException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+	public static void main(String[] args) throws ServiceException, InstantiationException, IllegalAccessException, ClassNotFoundException, InterruptedException {
 		LongOpt[] options=new LongOpt[3];
 		options[0]=new LongOpt("help",LongOpt.NO_ARGUMENT,null,'h');
 		options[1]=new LongOpt("enable-jetty",LongOpt.NO_ARGUMENT,null,'s');
@@ -68,7 +69,10 @@ public class StationInfoLauncher {
 			// Launch servlet service;
 			manager.addService((Service) Class.forName(servletServiceClassName).newInstance());
 		}		
-		manager.startAll();		
+		manager.startAll();
+		synchronized (manager) {
+			manager.wait();
+		}
 	}
 
 	private static void printHelp() {
