@@ -59,12 +59,7 @@ public class WeatherServlet extends VelocityServlet {
 	private static final String XHTML_MIME = "application/xhtml+xml"; //$NON-NLS-1$
 	
 	protected CacheManager cacheManager;
-	
-		
-	private Map confMap=new HashMap();
-
-	private Map driverMap=new HashMap();
-
+			
 	private Log log;
 
 
@@ -172,14 +167,14 @@ public class WeatherServlet extends VelocityServlet {
 			StationRecord max=StationUtils.getMaxTimeRangeStationRecord(station,start,end);
 			StationRecordsXYDataset dataset1=new StationRecordsXYDataset(station,records,new int[]{StationRecordsXYDataset.DATA_TEMPERATURE});		
 			StationRecordsXYDataset dataset2=new StationRecordsXYDataset(station,records,new int[]{StationRecordsXYDataset.DATA_HUMADITY});		
-			chart=ChartFactory.createTimeSeriesChart(Messages.getString("WeatherServlet.Temperartures_For")+station.getTitle(),null,null,null,false,true,false); //$NON-NLS-1$
+			chart=ChartFactory.createTimeSeriesChart(TranslationUtils.getString("weather_station_records_for",req.getLocale())+station.getTitle(),null,null,null,false,true,false); //$NON-NLS-1$
 			chart.getXYPlot().setDataset(1,dataset1);
 			chart.getXYPlot().setDataset(2,dataset2);
 			chart.getXYPlot().setRenderer(2,new StandardXYItemRenderer());
 			chart.getXYPlot().getRenderer(2).setPaint(Color.BLUE);
 			chart.getXYPlot().getRenderer(2).setStroke(new BasicStroke((float) 0.1));
-			chart.getXYPlot().setRangeAxis(0,new NumberAxis(Messages.getString("WeatherServlet.Temperatures"))); //$NON-NLS-1$
-			chart.getXYPlot().setRangeAxis(1,new NumberAxis(Messages.getString("WeatherServlet.Humadity_Percentage"))); //$NON-NLS-1$
+			chart.getXYPlot().setRangeAxis(0,new NumberAxis(Messages.getString("WeatherServlet.Temperatures"))); 
+			chart.getXYPlot().setRangeAxis(1,new NumberAxis(Messages.getString("WeatherServlet.Humadity_Percentage")));
 			chart.getXYPlot().mapDatasetToRangeAxis(1,0);
 			chart.getXYPlot().mapDatasetToRangeAxis(2,1);
 			chart.getXYPlot().getRangeAxis(0).setRangeWithMargins(min.getTemperature(),max.getTemperature());
