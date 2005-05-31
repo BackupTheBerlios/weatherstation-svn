@@ -33,6 +33,9 @@ import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.servlet.VelocityServlet;
 import org.apache.velocity.tools.generic.DateTool;
+import org.apache.velocity.tools.generic.ListTool;
+import org.apache.velocity.tools.generic.MathTool;
+import org.apache.velocity.tools.generic.NumberTool;
 import org.idanso.Messages;
 import org.idanso.dataset.StationRecordsXYDataset;
 import org.idanso.stationinfo.StationInfoLauncher;
@@ -61,6 +64,10 @@ public class WeatherServlet extends VelocityServlet {
 	protected CacheManager cacheManager;
 			
 	private Log log;
+	private ListTool listTool=new ListTool();
+	private DateTool dateTool=new DateTool();
+	private MathTool mathTool=new MathTool();
+	private NumberTool numberTool=new NumberTool();
 
 
 	public WeatherServlet()
@@ -200,8 +207,8 @@ public class WeatherServlet extends VelocityServlet {
 		return getTemplate(req,"top"); //$NON-NLS-1$
 	}
 	
-	private Template doView(HttpServletRequest req, HttpServletResponse res, Context context) throws ResourceNotFoundException, ParseErrorException, Exception {
-		Long id=new Long(req.getParameter("id")); //$NON-NLS-1$
+	private Calendar parseDateParameters(HttpServletRequest req)
+	{
 		Calendar calendar=Calendar.getInstance(req.getLocale());
 		calendar.set(Calendar.HOUR_OF_DAY,0);
 		calendar.set(Calendar.MINUTE,0);
@@ -230,6 +237,50 @@ public class WeatherServlet extends VelocityServlet {
 				}
 			}
 		}
+		return calendar;
+	}
+	
+	private Template doOverlook(HttpServletRequest req, HttpServletResponse res, Context context) throws ResourceNotFoundException, ParseErrorException, Exception
+	{
+		Long id=new Long(req.getParameter("id")); 
+		Session session=HibernateUtil.getSession();
+		Station station=(Station) session.get(Station.class,id);
+		List records=StationUtils.getOverlook(station);
+		context.put("station",station); //$NON-NLS-1$
+		context.put("records",records); //$NON-NLS-1$
+		return getTemplate(req,"overlook"); //$NON-NLS-1$
+		
+	}
+	
+	private Template doViewYear(HttpServletRequest req, HttpServletResponse res, Context context) throws ResourceNotFoundException, ParseErrorException, Exception {
+		Long id=new Long(req.getParameter("id"));
+		int year=Integer.parseInt(req.getParameter("year"));
+		Session session=HibernateUtil.getSession();
+		Station station=(Station) session.get(Station.class,id);
+		List records=StationUtils.getSummaryYear(station,year);
+		context.put("year",new Integer(year));
+		context.put("station",station); //$NON-NLS-1$
+		context.put("records",records); //$NON-NLS-1$
+		return getTemplate(req,"view_year"); //$NON-NLS-1$
+	}
+
+	private Template doViewMonth(HttpServletRequest req, HttpServletResponse res, Context context) throws ResourceNotFoundException, ParseErrorException, Exception {
+		Long id=new Long(req.getParameter("id"));
+		int year=Integer.parseInt(req.getParameter("year"));
+		int month=Integer.parseInt(req.getParameter("month"));
+		Session session=HibernateUtil.getSession();
+		Station station=(Station) session.get(Station.class,id);
+		List records=StationUtils.getSummaryMonth(station,year, month);
+		context.put("year",new Integer(year));
+		context.put("month",new Integer(month));
+		context.put("station",station); //$NON-NLS-1$
+		context.put("records",records); //$NON-NLS-1$
+		return getTemplate(req,"view_month"); //$NON-NLS-1$
+	}
+	
+	private Template doViewDay(HttpServletRequest req, HttpServletResponse res, Context context) throws ResourceNotFoundException, ParseErrorException, Exception {
+		Long id=new Long(req.getParameter("id")); 
+		Calendar calendar=parseDateParameters(req);
 		Date start,end;
 		start=calendar.getTime();
 		calendar.add(Calendar.DAY_OF_YEAR,1);
@@ -239,7 +290,6 @@ public class WeatherServlet extends VelocityServlet {
 		context.put("station",station); //$NON-NLS-1$
 		context.put("currDate",start);
 		context.put("nextDate",end);
-		context.put("date",new DateTool());
 		calendar.add(Calendar.DAY_OF_YEAR,-2);
 		context.put("prevDate",calendar.getTime());
 		
@@ -280,7 +330,12 @@ public class WeatherServlet extends VelocityServlet {
 			locales.add(e.nextElement());
 		// Set translation object
 		context.put("messages",TranslationUtils.getInstance());
+		context.put("list",listTool);
+		context.put("date",dateTool);
+		context.put("math",mathTool);
+		context.put("number",numberTool);
 		context.put("locales",locales);
+		context.put("locale",locales.get(0));
 		// Date time formatter
 		context.put("dateTimeFormatter",DateFormat.getDateTimeInstance(DateFormat.LONG,DateFormat.LONG,req.getLocale())); 
 		context.put("dateFormatter",DateFormat.getDateInstance(DateFormat.SHORT,req.getLocale()));
@@ -292,23 +347,38 @@ public class WeatherServlet extends VelocityServlet {
 			operation="/top"; //$NON-NLS-1$
 		if (operation.equals("/")) //$NON-NLS-1$
 			operation="/top"; //$NON-NLS-1$
+		Template template=null;
 		if (operation.equals("/top")) //$NON-NLS-1$
 		{
-			return doTop(req,res,context);
+			template=doTop(req,res,context);
 		}
-		else if (operation.equals("/view")) //$NON-NLS-1$
+		else if (operation.equals("/overlook")) //$NON-NLS-1$
 		{			
-			return doView(req,res,context);
+			template=doOverlook(req,res,context);
+		}
+		else if (operation.equals("/view_year")) //$NON-NLS-1$
+		{			
+			template=doViewYear(req,res,context);
+		}
+		else if (operation.equals("/view_month")) //$NON-NLS-1$
+		{			
+			template=doViewMonth(req,res,context);
+		}
+		else if (operation.equals("/view_day")) //$NON-NLS-1$
+		{			
+			template=doViewDay(req,res,context);
 		}
 		else if (operation.equals("/chart")) //$NON-NLS-1$
 		{			
-			return doChart(req,res);
+			template=doChart(req,res);
 		}
 		else
 		{
-			return null;
 		}
+		HibernateUtil.closeSession();
+		return template;
 	}
+
 
 	public void init()
 	{		

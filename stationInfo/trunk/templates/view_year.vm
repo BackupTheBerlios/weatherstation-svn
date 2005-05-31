@@ -1,0 +1,36 @@
+#parse("header.vm")
+<div class="navig">
+<a href="top">#m("station_list")</a>
+==>
+<a href="overlook?id=$station.id">#m("archive") $station.Title</a>
+==>
+<a href="view_year?id=$station.id&amp;year=$year">$year</a>
+</div>
+
+<table>
+<caption>#m("station_summary_for_year") $year</caption>
+<thead>
+  <tr>
+    <th>#m("month")</th>
+    <th>#m("total_records")</th>
+    <th>#m("min_temperature")</th>
+    <th>#m("max_temperature")</th>
+    <th>#m("avg_temperature")</th>
+  </tr>
+</thead>
+<tbody>
+#foreach ($record in $records)
+#set ($stamp=$list.get($record,0))
+<tr>
+  <td><a href="view_month?id=$station.id&amp;year=$date.format('yyyy',$stamp)&amp;month=$date.format('MM',$stamp)">$date.format('MMMM',$stamp,$locale)</a></td>
+  <td>$list.get($record,1)</td>
+  <td>$list.get($record,2)</td>
+  <td>$list.get($record,3)</td>
+  <td>$math.roundTo(2,$list.get($record,4))</td>
+</tr>
+#end
+</tbody>
+</table>
+
+
+#parse("footer.vm")

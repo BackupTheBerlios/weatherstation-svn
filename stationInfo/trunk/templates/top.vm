@@ -33,7 +33,7 @@
     <div><a href="chart?id=${station.id}&amp;delta=48">#m("48_hours")</a></div>
     <div><a href="chart?id=${station.id}&amp;delta=72">#m("72_hours")</a></div>
   </td>
-  <td><a href="view?id=${station.id}">#m("archive")</a></td>
+  <td><a href="overlook?id=${station.id}">#m("archive")</a></td>
 </tr>
 #end
 </tbody>

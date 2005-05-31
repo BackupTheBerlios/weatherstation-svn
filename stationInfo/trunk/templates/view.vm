@@ -1,8 +1,17 @@
 #parse("header.vm")
+#set ($year=$date.format('yyyy',$currDate))
+#set ($month=$date.format('MM',$currDate))
+#set ($day=$date.format('dd',$currDate))
 <div class="navig">
 <a href="top">#m("station_list")</a>
 ==>
-<a href="top">#m("archive") $station.Title</a>
+<a href="overlook?id=$station.id">#m("archive") $station.Title</a>
+==>
+<a href="view_year?id=$station.id&amp;year=$year">$year</a>
+==>
+<a href="view_month?id=$station.id&amp;year=$year&amp;month=$month">$month</a>
+==>
+<a href="view_day?id=$station.id&amp;year=$year&amp;month=$month&amp;day=$day">$day</a>
 </div>
 <h2>#m("records_for") "$station.Title" - $station.Location #m("for_date") $dateFormatter.format($currDate)</h2>
 
@@ -43,9 +52,9 @@
 </div>
 
 <div class="archiveNavig">
-  <a href="view?id=$station.id&amp;day=$date.format('d',$prevDate)&amp;month=$date.format('M',$prevDate)&amp;year=$date.format('yyyy',$prevDate)">#m("previous_day")</a>
+  <a href="view_day?id=$station.id&amp;day=$date.format('d',$prevDate)&amp;month=$date.format('M',$prevDate)&amp;year=$date.format('yyyy',$prevDate)">#m("previous_day")</a>
    &nbsp;
-  <a href="view?id=$station.id&amp;day=$date.format('d',$nextDate)&amp;month=$date.format('M',$nextDate)&amp;year=$date.format('yyyy',$nextDate)">#m("next_day")</a>
+  <a href="view_day?id=$station.id&amp;day=$date.format('d',$nextDate)&amp;month=$date.format('M',$nextDate)&amp;year=$date.format('yyyy',$nextDate)">#m("next_day")</a>
 
 </div>
 

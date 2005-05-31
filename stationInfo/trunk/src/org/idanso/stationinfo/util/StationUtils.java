@@ -169,4 +169,27 @@ public class StationUtils {
 		
 	}
 
+	public static List getOverlook(Station station) throws HibernateException {
+		Session session=HibernateUtil.getSession();
+		Query q=session.createQuery("select max(rec.Stamp),count(*),min(rec.Temperature),max(rec.Temperature),avg(rec.Temperature) from StationRecord rec where rec.station=? group by extract(year from rec.Stamp)");
+		q.setParameter(0,station);
+		return q.list();
+	}
+	
+	public static List getSummaryYear(Station station,int year) throws HibernateException {
+		Session session=HibernateUtil.getSession();
+		Query q=session.createQuery("select max(rec.Stamp),count(*),min(rec.Temperature),max(rec.Temperature),avg(rec.Temperature) from StationRecord rec where rec.station=? and date_part('year',rec.Stamp)=? group by extract(month FROM rec.Stamp)");
+		q.setParameter(0,station);
+		q.setInteger(1,year);
+		return q.list();
+	}
+
+	public static List getSummaryMonth(Station station,int year,int month) throws HibernateException {
+		Session session=HibernateUtil.getSession();
+		Query q=session.createQuery("select max(rec.Stamp),count(*),min(rec.Temperature),max(rec.Temperature),avg(rec.Temperature) from StationRecord rec where rec.station=? and date_part('year',rec.Stamp)=? and date_part('month',rec.Stamp)=? group by extract(day FROM rec.Stamp)  order by extract(day FROM rec.Stamp) asc ");
+		q.setParameter(0,station);
+		q.setInteger(1,year);
+		q.setInteger(2,month);
+		return q.list();
+	}
 }
