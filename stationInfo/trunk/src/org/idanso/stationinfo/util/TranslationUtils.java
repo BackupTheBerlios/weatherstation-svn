@@ -38,7 +38,7 @@ public class TranslationUtils {
 				String dst=trans.getDstString();
 				if (dst!=null)
 				{
-					return dst;
+					return dst.replace('_',' ');
 				}				
 			}
 		}
