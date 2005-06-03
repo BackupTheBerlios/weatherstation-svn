@@ -37,7 +37,6 @@ import org.apache.velocity.tools.generic.DateTool;
 import org.apache.velocity.tools.generic.ListTool;
 import org.apache.velocity.tools.generic.MathTool;
 import org.apache.velocity.tools.generic.NumberTool;
-import org.idanso.Messages;
 import org.idanso.dataset.StationRecordsXYDataset;
 import org.idanso.stationinfo.StationInfoLauncher;
 import org.idanso.stationinfo.util.HibernateUtil;
@@ -397,7 +396,7 @@ public class WeatherServlet extends VelocityServlet {
 		context.put("dateTimeFormatter",DateFormat.getDateTimeInstance(DateFormat.LONG,DateFormat.LONG,req.getLocale())); 
 		context.put("dateFormatter",DateFormat.getDateInstance(DateFormat.SHORT,req.getLocale()));
 		// Site title
-		context.put("title",Messages.getString("WeatherServlet.Weather_Stations")); //$NON-NLS-1$ //$NON-NLS-2$
+		context.put("title",TranslationUtils.getString("weather_stations",locales)); //$NON-NLS-1$ //$NON-NLS-2$
 		// Split per operation
 		String operation=req.getPathInfo();
 		if (operation==null)
