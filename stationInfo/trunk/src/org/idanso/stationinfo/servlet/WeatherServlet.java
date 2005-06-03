@@ -100,35 +100,18 @@ public class WeatherServlet extends VelocityServlet {
 				}
 			}
 		}
-		Calendar calendar=Calendar.getInstance(req.getLocale());
+		Calendar calendar=parseDateParameters(req,false);
 		{
 			String str;
-			String[] params=new String[]{"year","month","day","hour","minute"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-			int[] fields=new int[]{Calendar.YEAR,Calendar.MONTH,Calendar.DAY_OF_MONTH,Calendar.HOUR_OF_DAY,Calendar.MINUTE};
-			for(int i=0;i<params.length;++i)
-			{
-				try
-				{
-					str=req.getParameter(params[i]);
-					if (str!=null)
-					{
-						int val=Integer.parseInt(str);
-						if(fields[i]==Calendar.MONTH)
-							--val;
-						calendar.set(fields[i],val);
-						notime=false;
-					}
-					
-				}
-				catch(NumberFormatException e)
-				{
-					log.debug("Bad number input",e);					 //$NON-NLS-1$
-				}
-			}
 			str=req.getParameter("delta"); //$NON-NLS-1$
 			if (str!=null)
 			{				
 				delta=Integer.parseInt(str);
+			}
+			str=req.getParameter("year"); //$NON-NLS-1$
+			if (str!=null)
+			{				
+				notime=false;
 			}
 			// If no time was given, use reverse mode in any case
 			reverse=reverse || notime;
@@ -207,13 +190,16 @@ public class WeatherServlet extends VelocityServlet {
 		return getTemplate(req,"top"); //$NON-NLS-1$
 	}
 	
-	private Calendar parseDateParameters(HttpServletRequest req)
+	private Calendar parseDateParameters(HttpServletRequest req,boolean zerotime)
 	{
 		Calendar calendar=Calendar.getInstance(req.getLocale());
-		calendar.set(Calendar.HOUR_OF_DAY,0);
-		calendar.set(Calendar.MINUTE,0);
-		calendar.set(Calendar.SECOND,0);
-		calendar.set(Calendar.MILLISECOND,0);
+		if (zerotime)
+		{
+			calendar.set(Calendar.HOUR_OF_DAY,0);
+			calendar.set(Calendar.MINUTE,0);
+			calendar.set(Calendar.SECOND,0);
+			calendar.set(Calendar.MILLISECOND,0);
+		}
 		{
 			String str;
 			String[] params=new String[]{"year","month","day"}; 
@@ -280,7 +266,7 @@ public class WeatherServlet extends VelocityServlet {
 	
 	private Template doViewDay(HttpServletRequest req, HttpServletResponse res, Context context) throws ResourceNotFoundException, ParseErrorException, Exception {
 		Long id=new Long(req.getParameter("id")); 
-		Calendar calendar=parseDateParameters(req);
+		Calendar calendar=parseDateParameters(req,true);
 		Date start,end;
 		start=calendar.getTime();
 		calendar.add(Calendar.DAY_OF_YEAR,1);
