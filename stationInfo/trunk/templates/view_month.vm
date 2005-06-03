@@ -12,7 +12,7 @@
 <div class="archiveTop">
 <div class="smallGraph">
 <a href="monthly_chart?id=$station.id&amp;year=$year&amp;month=$month">
-  <img src="monthly_chart?id=$station.id&amp;year=$year&amp;month=$month" alt="תרשים סיכום חודשי" />
+  <img src="monthly_chart?id=$station.id&amp;year=$year&amp;month=$month" alt="#m('monthly_summary_chart')" />
 </a>
 </div>
 </div>

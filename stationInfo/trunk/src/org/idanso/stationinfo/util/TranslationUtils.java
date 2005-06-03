@@ -38,11 +38,11 @@ public class TranslationUtils {
 				String dst=trans.getDstString();
 				if (dst!=null)
 				{
-					return dst.replace('_',' ');
+					return dst;
 				}				
 			}
 		}
-		return string;
+		return string.replace('_',' ');
 	}
 	
 	public static String getString(String string,Locale locale) throws HibernateException
@@ -50,7 +50,7 @@ public class TranslationUtils {
 		Translation trans=findTranslation(string,locale);
 		if (trans==null)
 		{
-			return string;
+			return string.replace('_',' ');
 		}
 		else
 		{
