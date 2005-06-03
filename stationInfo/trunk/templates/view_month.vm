@@ -9,6 +9,14 @@
 <a href="view_month?id=$station.id&amp;year=$year&amp;month=$month">$month</a>
 </div>
 
+<div class="archiveTop">
+<div class="smallGraph">
+<a href="monthly_chart?id=$station.id&amp;year=$year&amp;month=$month">
+  <img src="monthly_chart?id=$station.id&amp;year=$year&amp;month=$month" alt="תרשים סיכום חודשי" />
+</a>
+</div>
+</div>
+
 <table>
 <caption>#m("station_summary_for_month") $month/$year</caption>
 <thead>

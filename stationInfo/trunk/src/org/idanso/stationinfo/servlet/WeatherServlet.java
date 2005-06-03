@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -48,7 +49,13 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.labels.StandardCategoryLabelGenerator;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 public class WeatherServlet extends VelocityServlet {
 
@@ -79,6 +86,70 @@ public class WeatherServlet extends VelocityServlet {
 		super.destroy();
 		cacheManager.shutdown();
 	}
+	
+	
+	private Template doMonthlyChart(HttpServletRequest req, HttpServletResponse res) throws HibernateException, IllegalStateException, CacheException, IOException {
+		Long id=new Long(req.getParameter("id"));
+		int year=Integer.parseInt(req.getParameter("year"));
+		int month=Integer.parseInt(req.getParameter("month"));
+		String chartCacheId;
+		chartCacheId="MonthlyChartChart_"+id+"_"+Integer.toString(year)+"_"+Integer.toString(month)+req.getLocale(); //$NON-NLS-1$
+		Cache chartCache=cacheManager.getCache("chartCache"); //$NON-NLS-1$
+		Element element=chartCache.get(chartCacheId);
+		if(element!=null)
+		{
+			res.setContentType("image/png"); //$NON-NLS-1$
+			res.getOutputStream().write((byte[]) element.getValue());			
+		}
+		else
+		{
+			Session session=HibernateUtil.getSession();
+			Station station=(Station) session.get(Station.class,id);
+			List records=StationUtils.getSummaryMonth(station,year, month);
+			JFreeChart chart=null;
+			chart=ChartFactory.createBarChart(null,null,null,null,PlotOrientation.VERTICAL,true,true,false);
+			chart.setTitle(TranslationUtils.getString("monthly_chart_for",req.getLocale())+" "+station.getTitle());
+			CategoryPlot plot=chart.getCategoryPlot();
+			BarRenderer renderer=(BarRenderer) plot.getRenderer();
+			renderer.setSeriesPaint(0,Color.BLUE);
+			renderer.setSeriesPaint(1,Color.RED);
+			renderer.setLabelGenerator(new StandardCategoryLabelGenerator());
+			renderer.setItemLabelsVisible(true);
+			renderer.setItemMargin(0.3);
+			DefaultCategoryDataset minMaxData=new DefaultCategoryDataset();
+			DefaultCategoryDataset avgData=new DefaultCategoryDataset();
+			Iterator it=records.iterator();
+			DateTool dateTool=new DateTool();
+			while(it.hasNext())
+			{
+				Object[] row=(Object[]) it.next();
+				Date stamp=(Date) row[0];
+				Float min=(Float) row[2]; 
+				Float max=(Float) row[3];
+				Float avg=(Float) row[4]; 
+				String date=dateTool.format("dd",stamp);
+				minMaxData.addValue(min,TranslationUtils.getString("min",req.getLocale()),date);			
+				minMaxData.addValue(max,TranslationUtils.getString("max",req.getLocale()),date);			
+				avgData.addValue(avg,TranslationUtils.getString("average",req.getLocale()),date);			
+			}
+			plot.setDataset(0,minMaxData);
+			plot.setDataset(1,avgData);
+			LineAndShapeRenderer lineRenderer=new LineAndShapeRenderer();
+			lineRenderer.setPaint(Color.lightGray);
+			plot.setRenderer(1,lineRenderer);
+			try {
+				res.setContentType("image/png"); //$NON-NLS-1$
+				byte[] image=ChartUtilities.encodeAsPNG(chart.createBufferedImage((int) (1024),(int) (768)));
+				chartCache.put(new Element(chartCacheId, image));;
+				res.getOutputStream().write(image);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		
+		}
+		return null;
+	}
+	
 		
 	private Template doChart(HttpServletRequest req, HttpServletResponse res) throws HibernateException, IllegalStateException, CacheException, IOException {
 		// Fetch parameters
@@ -132,11 +203,11 @@ public class WeatherServlet extends VelocityServlet {
 		String chartCacheId;
 		if (!notime)
 		{
-			chartCacheId="ThermalRHChart"+id+"_"+Float.toString(scale)+start.toString()+end.toString(); //$NON-NLS-1$
+			chartCacheId="ThermalRHChart"+id+"_"+Float.toString(scale)+start.toString()+end.toString()+req.getLocale();; //$NON-NLS-1$
 		}
 		else
 		{
-			chartCacheId="ThermalRHChartNOW"+id+"_"+Float.toString(scale)+Integer.toString(delta);			 //$NON-NLS-1$
+			chartCacheId="ThermalRHChartNOW"+id+"_"+Float.toString(scale)+Integer.toString(delta)+req.getLocale();;			 //$NON-NLS-1$
 		}
 		log.debug("Checking cache for" + chartCacheId);					 //$NON-NLS-1$
 		Cache chartCache=cacheManager.getCache("chartCache"); //$NON-NLS-1$
@@ -157,14 +228,14 @@ public class WeatherServlet extends VelocityServlet {
 			StationRecord max=StationUtils.getMaxTimeRangeStationRecord(station,start,end);
 			StationRecordsXYDataset dataset1=new StationRecordsXYDataset(station,records,new int[]{StationRecordsXYDataset.DATA_TEMPERATURE});		
 			StationRecordsXYDataset dataset2=new StationRecordsXYDataset(station,records,new int[]{StationRecordsXYDataset.DATA_HUMADITY});		
-			chart=ChartFactory.createTimeSeriesChart(TranslationUtils.getString("weather_station_records_for",req.getLocale())+station.getTitle(),null,null,null,false,true,false); //$NON-NLS-1$
+			chart=ChartFactory.createTimeSeriesChart(TranslationUtils.getString("weather_station_records_for",req.getLocale())+" "+station.getTitle(),null,null,null,false,true,false); //$NON-NLS-1$
 			chart.getXYPlot().setDataset(1,dataset1);
 			chart.getXYPlot().setDataset(2,dataset2);
 			chart.getXYPlot().setRenderer(2,new StandardXYItemRenderer());
 			chart.getXYPlot().getRenderer(2).setPaint(Color.BLUE);
 			chart.getXYPlot().getRenderer(2).setStroke(new BasicStroke((float) 0.1));
-			chart.getXYPlot().setRangeAxis(0,new NumberAxis(Messages.getString("WeatherServlet.Temperatures"))); 
-			chart.getXYPlot().setRangeAxis(1,new NumberAxis(Messages.getString("WeatherServlet.Humadity_Percentage")));
+			chart.getXYPlot().setRangeAxis(0,new NumberAxis(TranslationUtils.getString("temperatures",req.getLocale()))); 
+			chart.getXYPlot().setRangeAxis(1,new NumberAxis(TranslationUtils.getString("relative_humadity",req.getLocale())));
 			chart.getXYPlot().mapDatasetToRangeAxis(1,0);
 			chart.getXYPlot().mapDatasetToRangeAxis(2,1);
 			chart.getXYPlot().getRangeAxis(0).setRangeWithMargins(min.getTemperature(),max.getTemperature());
@@ -357,6 +428,10 @@ public class WeatherServlet extends VelocityServlet {
 		else if (operation.equals("/chart")) //$NON-NLS-1$
 		{			
 			template=doChart(req,res);
+		}
+		else if (operation.equals("/monthly_chart")) //$NON-NLS-1$
+		{			
+			template=doMonthlyChart(req,res);
 		}
 		else
 		{
