@@ -17,6 +17,11 @@
 			<generator class="vm"/>
 		</id>
 
+		<map name="parameters" table="station_parameter" lazy="true">
+			<key column="id" />
+			<index column="prop"  type="string" />
+			<element column="value" type="string"  />
+		</map>
 		<property
 			name="Title"
 			column="title"
@@ -51,6 +56,12 @@
 			type="string"
 			not-null="false"
 			length="50"
+		/>
+		<property
+			name="Driver"
+			column="driver"
+			type="string"
+			not-null="true"
 		/>
 	
 	</class>	
@@ -111,6 +122,36 @@
 		/>
 
 	</class>	
-	
+
+	<class
+		name="StationParameter"
+		table="station_parameter"
+	>
+	<cache usage="read-write"/>
+		<id
+			name="Id"
+			type="java.lang.Long"
+			column="id"
+		>
+			<generator class="vm"/>
+		</id>
+		
+		<many-to-one class="Station" name="station" column="station" />
+
+		<property
+			name="Key"
+			column="prop"
+			type="string"
+			not-null="true"			
+		/>
+
+		<property
+			name="Value"
+			column="value"
+			type="string"
+			not-null="false"			
+		/>
+		
+	</class>	
 	
 </hibernate-mapping>

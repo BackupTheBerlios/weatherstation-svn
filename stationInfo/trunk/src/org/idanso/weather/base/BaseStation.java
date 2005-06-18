@@ -20,6 +20,7 @@ public abstract class BaseStation  implements Serializable {
 	public static String PROP_LATITUDE = "Latitude";
 	public static String PROP_LONGITUDE = "Longitude";
 	public static String PROP_ALIAS = "Alias";
+	public static String PROP_DRIVER = "Driver";
 
 
 	// constructors
@@ -32,6 +33,18 @@ public abstract class BaseStation  implements Serializable {
 	 */
 	public BaseStation (java.lang.Long id) {
 		this.setId(id);
+		initialize();
+	}
+
+	/**
+	 * Constructor for required fields
+	 */
+	public BaseStation (
+		java.lang.Long id,
+		java.lang.String driver) {
+
+		this.setId(id);
+		this.setDriver(driver);
 		initialize();
 	}
 
@@ -50,6 +63,10 @@ public abstract class BaseStation  implements Serializable {
 	private float latitude;
 	private float longitude;
 	private java.lang.String alias;
+	private java.lang.String driver;
+
+	// collections
+	private java.util.Map parameters;
 
 
 
@@ -156,6 +173,40 @@ public abstract class BaseStation  implements Serializable {
 	 */
 	public void setAlias (java.lang.String alias) {
 		this.alias = alias;
+	}
+
+
+
+	/**
+	 * Return the value associated with the column: driver
+	 */
+	public java.lang.String getDriver () {
+		return driver;
+	}
+
+	/**
+	 * Set the value related to the column: driver
+	 * @param driver the driver value
+	 */
+	public void setDriver (java.lang.String driver) {
+		this.driver = driver;
+	}
+
+
+
+	/**
+	 * Return the value associated with the column: parameters
+	 */
+	public java.util.Map getParameters () {
+		return parameters;
+	}
+
+	/**
+	 * Set the value related to the column: parameters
+	 * @param parameters the parameters value
+	 */
+	public void setParameters (java.util.Map parameters) {
+		this.parameters = parameters;
 	}
 
 

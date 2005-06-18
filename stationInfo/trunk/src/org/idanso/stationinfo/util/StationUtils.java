@@ -21,7 +21,6 @@ import org.idanso.weather.StationRecord;
 
 public class StationUtils {
 
-	private static Properties conf=null;
 	private static Log log=LogFactory.getLog(StationUtils.class);
 	
 	public static List getAllStations(boolean extended) throws HibernateException {		
@@ -56,22 +55,6 @@ public class StationUtils {
 		return stations;
 	}
 	
-	public static Properties getConfiguration() {
-		if (conf==null)
-		{
-			InputStream res=StationUtils.class.getResourceAsStream("/weather.properties");
-			conf=new Properties();
-			try {
-				conf.load(res);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
-		// TODO Auto-generated method stub
-		return conf;
-	}
 	
 	public static List getExtendedAllStations() throws HibernateException {
 		Session session=HibernateUtil.getSession();

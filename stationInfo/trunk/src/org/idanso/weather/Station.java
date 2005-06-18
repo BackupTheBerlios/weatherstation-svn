@@ -25,6 +25,18 @@ public class Station extends BaseStation {
 		super(id);
 	}
 
+	/**
+	 * Constructor for required fields
+	 */
+	public Station (
+		java.lang.Long id,
+		java.lang.String driver) {
+
+		super (
+			id,
+			driver);
+	}
+
 /*[CONSTRUCTOR MARKER END]*/
 
 	public StationRecord createStationRecord()

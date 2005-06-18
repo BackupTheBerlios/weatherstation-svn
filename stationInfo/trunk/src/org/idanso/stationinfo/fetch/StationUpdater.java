@@ -1,11 +1,9 @@
 package org.idanso.stationinfo.fetch;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.TimerTask;
 
 import net.sf.hibernate.HibernateException;
@@ -25,8 +23,6 @@ import org.idanso.weatherstation.WeatherStationRecord;
 
 public class StationUpdater extends TimerTask{
 	
-	private Map driverMap=new HashMap();
-	private Map confMap=new HashMap();
 	// TODO: Find out why we have to deal with Log4JLogger directly..
 	private static Log log=LogFactory.getLog(StationUpdater.class);
 	
@@ -35,48 +31,7 @@ public class StationUpdater extends TimerTask{
 	public StationUpdater() throws HibernateException
 	{
 		log.info("Initializing weather stations updater...");
-		initConfig();
 		initUpdater();
-	}
-	
-	private void initConfig() {
-		Properties conf=StationUtils.getConfiguration();
-		Iterator it=conf.keySet().iterator();
-		while(it.hasNext())
-		{
-			String key=(String) it.next();
-			String fullkey=key;
-			if(key.startsWith("org.weather."))
-			{
-				key=key.substring(12);
-				if(key.startsWith("station."))
-				{
-					key=key.substring(8);
-					String stationName=key.substring(0,key.indexOf('.'));
-					key=key.substring(key.indexOf('.')+1);
-					Properties stationConf=(Properties) confMap.get(stationName);
-					if (stationConf==null)
-					{
-						stationConf=new Properties();
-						confMap.put(stationName,stationConf);
-					}
-					if (key.equals("class"))
-					{
-						try {
-							Class driver=Class.forName(conf.getProperty(fullkey));
-							driverMap.put(stationName,driver);
-						} catch (ClassNotFoundException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-					else
-					{
-						stationConf.put(key,conf.getProperty(fullkey));
-					}
-				}
-			}
-		}
 	}
 	
 	
@@ -88,19 +43,17 @@ public class StationUpdater extends TimerTask{
 			Station station=(Station) it.next();
 			String stationName=station.getAlias();			
 			try {
-				Properties stationConf=(Properties) confMap.get(stationName);
-				Class klass=(Class) driverMap.get(stationName);
-				if (klass==null)
-				{
-					log.error("Could not find driver for "+stationName);
-				}
-				else
-				{
-					WeatherStation weatherStation=(WeatherStation) klass.newInstance();
-					weatherStation.configure((Properties) stationConf.clone());
-					Object[] arr=new Object[]{weatherStation,station};
-					updateStations.add(arr);
-				}
+				String className=station.getDriver();
+				Map parameters=station.getParameters();
+				Class klass=Class.forName(className);
+				WeatherStation weatherStation=(WeatherStation) klass.newInstance();
+				weatherStation.configure(parameters);
+				Object[] arr=new Object[]{weatherStation,station};
+				updateStations.add(arr);
+			} 
+			catch (ClassNotFoundException e)
+			{
+				log.error("Could not find driver for "+stationName);				
 			} catch (InstantiationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -108,9 +61,7 @@ public class StationUpdater extends TimerTask{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
-		
-//		timer.schedule(new StationUpdater(),0,1000);		
+		}		
 	}
 	
 	public void run() {
