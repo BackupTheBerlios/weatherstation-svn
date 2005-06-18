@@ -31,7 +31,8 @@ CREATE TABLE station (
     "location" character varying(50),
     latitude real,
     longitude real,
-    alias character varying(150)
+    alias character varying(150),
+    driver character varying(200)
 ) WITHOUT OIDS;
 
 
@@ -102,7 +103,20 @@ CREATE TABLE translation (
 
 
 --
--- TOC entry 14 (OID 17170)
+-- TOC entry 12 (OID 17199)
+-- Name: station_parameter; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE station_parameter (
+    id serial NOT NULL,
+    station integer NOT NULL,
+    prop character varying NOT NULL,
+    value character varying
+) WITHOUT OIDS;
+
+
+--
+-- TOC entry 15 (OID 17170)
 -- Name: k_station; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -110,7 +124,7 @@ CREATE INDEX k_station ON station_record USING btree (station);
 
 
 --
--- TOC entry 13 (OID 17171)
+-- TOC entry 14 (OID 17171)
 -- Name: k_stamp; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -118,7 +132,7 @@ CREATE INDEX k_stamp ON station_record USING btree (stamp);
 
 
 --
--- TOC entry 17 (OID 17194)
+-- TOC entry 18 (OID 17194)
 -- Name: k_string; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -126,7 +140,7 @@ CREATE UNIQUE INDEX k_string ON translation USING btree (lang, src_string);
 
 
 --
--- TOC entry 12 (OID 17172)
+-- TOC entry 13 (OID 17172)
 -- Name: station_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -135,7 +149,7 @@ ALTER TABLE ONLY station
 
 
 --
--- TOC entry 15 (OID 17178)
+-- TOC entry 16 (OID 17178)
 -- Name: station_record_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -144,7 +158,7 @@ ALTER TABLE ONLY station_record
 
 
 --
--- TOC entry 16 (OID 17195)
+-- TOC entry 17 (OID 17195)
 -- Name: k_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -153,11 +167,38 @@ ALTER TABLE ONLY translation
 
 
 --
--- TOC entry 18 (OID 17174)
+-- TOC entry 19 (OID 17205)
+-- Name: station_parameter_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY station_parameter
+    ADD CONSTRAINT station_parameter_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 20 (OID 17207)
+-- Name: station_parameter_station_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY station_parameter
+    ADD CONSTRAINT station_parameter_station_key UNIQUE (station, prop);
+
+
+--
+-- TOC entry 21 (OID 17174)
 -- Name: $1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY station_record
+    ADD CONSTRAINT "$1" FOREIGN KEY (station) REFERENCES station(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 22 (OID 17209)
+-- Name: $1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY station_parameter
     ADD CONSTRAINT "$1" FOREIGN KEY (station) REFERENCES station(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
