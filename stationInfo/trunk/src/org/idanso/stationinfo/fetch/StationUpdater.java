@@ -114,68 +114,74 @@ public class StationUpdater extends TimerTask{
 	}
 	
 	public void run() {
-		Session sess;
-		Transaction tr;
-		try {
-			sess=HibernateUtil.getSession();
-			tr=sess.beginTransaction();
-		} catch (HibernateException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return;
-		}
-		Iterator it=updateStations.iterator();
-		while(it.hasNext())
+		try
 		{
-			Object arr[]=(Object[]) it.next();
-			WeatherStation weatherStation=(WeatherStation) arr[0];
-			Station station=(Station) arr[1];
+			Session sess;
+			Transaction tr;
 			try {
-				if (weatherStation.update())
-				{
-					WeatherStationRecord rec=weatherStation.getRecord();
-					StationRecord lastRecord=station.getLatestRecord();
-					StationRecord record=station.createStationRecord();
-					if (lastRecord!=null)
-					{
-						long a,b;
-						a=lastRecord.getStamp().getTime();
-						b=rec.getStamp().getTime();
-						if (lastRecord.getStamp().getTime()==rec.getStamp().getTime())
-						{
-							// Avoid duplicates
-							continue;
-						}
-					}
-					record.setTemperature(rec.getTemperature());
-					record.setHumadity(rec.getHumadity());
-					record.setPressure(rec.getPressure());
-					record.setWindDirection(rec.getWindDirection());
-					record.setWindSpeed(rec.getWindSpeed());
-					record.setStamp(rec.getStamp());
-					sess.save(record);						
-				}
-			} catch (WeatherStationException e) {
+				sess=HibernateUtil.getSession();
+				tr=sess.beginTransaction();
+			} catch (HibernateException e1) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				e1.printStackTrace();
+				return;
+			}
+			Iterator it=updateStations.iterator();
+			while(it.hasNext())
+			{
+				Object arr[]=(Object[]) it.next();
+				WeatherStation weatherStation=(WeatherStation) arr[0];
+				Station station=(Station) arr[1];
+				try {
+					if (weatherStation.update())
+					{
+						WeatherStationRecord rec=weatherStation.getRecord();
+						StationRecord lastRecord=station.getLatestRecord();
+						StationRecord record=station.createStationRecord();
+						if (lastRecord!=null)
+						{
+							long a,b;
+							a=lastRecord.getStamp().getTime();
+							b=rec.getStamp().getTime();
+							if (lastRecord.getStamp().getTime()==rec.getStamp().getTime())
+							{
+								// Avoid duplicates
+								continue;
+							}
+						}
+						record.setTemperature(rec.getTemperature());
+						record.setHumadity(rec.getHumadity());
+						record.setPressure(rec.getPressure());
+						record.setWindDirection(rec.getWindDirection());
+						record.setWindSpeed(rec.getWindSpeed());
+						record.setStamp(rec.getStamp());
+						sess.save(record);						
+					}
+				} catch (WeatherStationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (HibernateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (UnsupportedDevice e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Exception e) {
+					log.debug("Error when updating station "+station.getAlias(),e);				
+				}
+				
+			}
+			try {
+				tr.commit();
 			} catch (HibernateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (UnsupportedDevice e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (Exception e) {
-				log.debug("Error when updating station "+station.getAlias(),e);				
 			}
-			
 		}
-		try {
-			tr.commit();
-		} catch (HibernateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		catch(Exception e)
+		{
+			log.warn("Error when updating stations",e);							
 		}
-		
 	}
 
 	
